@@ -40,7 +40,7 @@ jobs:
 
     if: github.event.repository.owner.id == github.event.sender.id
 
-    runs-on: gitpod-runner
+    runs-on: self-hosted
 
     permissions:
 
