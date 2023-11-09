@@ -1,4 +1,4 @@
-name: Rad build
+name: Rad build 🔮
 
 
 
@@ -50,7 +50,7 @@ jobs:
 
 
 
-    - name: Prepare Env
+    - name: Menyiapkan Env ✨
 
       run: |
 
@@ -66,7 +66,7 @@ jobs:
 
           
 
-    - name: Prepare TC
+    - name: Menyiapkan TC 🪫
 
       run: |
 
@@ -80,7 +80,7 @@ jobs:
 
 
 
-    - name: Prepare Kernel
+    - name: Menyiapkan Kernel 🔌
 
       run: |
 
@@ -92,7 +92,7 @@ jobs:
 
 
 
-    - name: Build Kernel and Save Log
+    - name: Membangun Kernel 🧬
 
       run: |
 
@@ -136,7 +136,7 @@ jobs:
 
 
 
-    - name: Prepare AK3
+    - name: Menyiapkan AK3 ⚖️
 
       run: |
 
@@ -152,7 +152,7 @@ jobs:
 
 
 
-    - name: Upload Build Log and Release
+    - name: Inspect terakhir pra-rilis 🧮
 
       uses: actions/upload-artifact@v2
 
@@ -164,7 +164,7 @@ jobs:
 
 
 
-    - name: Upload Release
+    - name: Mengunggah Perilisan 🔋
 
       uses: softprops/action-gh-release@v1
 
@@ -196,7 +196,7 @@ jobs:
 
 
 
-    - name: Send Build Log to Telegram
+    - name: mengirim log ke telegram 🌅
 
       if: always()  # This step will run even if previous steps fail
 
