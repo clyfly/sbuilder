@@ -6,11 +6,11 @@ on:
       KERNEL_REPO:
         description: 'KERNEL_REPO'
         required: true
-        default: 'https://github.com/AndroDesk/kernel-mtk'
+        default: 'https://github.com/clyfly/kernel-mtk.git'
       KERNEL_BRANCH:
         description: 'KERNEL_BRANCH'
         required: true
-        default: 's'
+        default: 'rad-13'
       KERNEL_DEFCONFIG:
         description: 'KERNEL_DEFCONFIG'
         required: true
