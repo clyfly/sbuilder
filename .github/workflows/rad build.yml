@@ -40,7 +40,7 @@ jobs:
 
     if: github.event.repository.owner.id == github.event.sender.id
 
-    runs-on: buildjet-32vcpu-ubuntu-2204
+    runs-on: buildjet-16vcpu-ubuntu-2204
 
     permissions:
 
