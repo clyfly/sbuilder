@@ -1,4 +1,4 @@
-name: Kernel Build
+name: Rad build
 
 
 
@@ -14,7 +14,7 @@ on:
 
         required: true
 
-        default: 'https://github.com/AndroDesk/kernel-mtk'
+        default: 'https://github.com/clyfly/kernel-mtk.git'
 
       KERNEL_BRANCH:
 
@@ -22,7 +22,7 @@ on:
 
         required: true
 
-        default: 's'
+        default: 'rad-13'
 
       KERNEL_DEFCONFIG:
 
@@ -58,9 +58,9 @@ jobs:
 
         sudo apt -y install gawk aria2 git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3 &> /dev/null
 
-        git config --global user.name "builder"
+        git config --global user.name "radinka"
 
-        git config --global user.email "delta@builder.com"
+        git config --global user.email "radinka@denwahstore.my.id"
 
         mkdir -p $GITHUB_WORKSPACE/project
 
@@ -88,7 +88,7 @@ jobs:
 
         git clone -b ${{ github.event.inputs.KERNEL_BRANCH }} ${{ github.event.inputs.KERNEL_REPO }} linux --recurse-submodules --depth=1 &> /dev/null
 
-        git clone -b master https://github.com/AndroDesk/AnyKernel3 AnyKernel3 --depth=1 &> /dev/null
+        git clone -b master https://github.com/clyfly/AnyKernel3.git AnyKernel3 --depth=1 &> /dev/null
 
 
 
@@ -108,9 +108,9 @@ jobs:
 
         export ARCH=arm64
 
-        export KBUILD_BUILD_HOST=DeltaHost
+        export KBUILD_BUILD_HOST=RadBuild
 
-        export KBUILD_BUILD_USER=Troublescope
+        export KBUILD_BUILD_USER=Radinka
 
         export KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 
