@@ -1,4 +1,4 @@
-name: Kernel Build
+name: Rad Builder
 
 on:
   workflow_dispatch:
@@ -28,8 +28,8 @@ jobs:
       run: |
         sudo apt update  &> /dev/null
         sudo apt -y install gawk aria2 git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3 &> /dev/null
-        git config --global user.name "rad"
-        git config --global user.email "rad@clyfly.id"
+        git config --global user.name "Rad"
+        git config --global user.email "Rad@clyfly.my"
         mkdir -p $GITHUB_WORKSPACE/project
           
     - name: Prepare TC
@@ -45,50 +45,45 @@ jobs:
         git clone -b ${{ github.event.inputs.KERNEL_BRANCH }} ${{ github.event.inputs.KERNEL_REPO }} linux --recurse-submodules --depth=1 &> /dev/null
         git clone -b master https://github.com/clyfly/AnyKernel3.git AnyKernel3 --depth=1 &> /dev/null
 
-    - name: Build Kernel and Save Log
+    - name: Building Kernel
       run: |
         cd $GITHUB_WORKSPACE/project/linux
         PATH=$GITHUB_WORKSPACE/project/clang/bin:$PATH
         export TZ="Asia/Jakarta"
         export DATE=$(date "+%Y%m%d-%H%M")
         echo "BUILD_DATE=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
+        echo "KERNEL_VER=$(make kernelversion)" >> $GITHUB_ENV
+        echo "CLANG_VER=$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g')" >> $GITHUB_ENV
         export ARCH=arm64
-        export KBUILD_BUILD_HOST=rad@gitpod
-        export KBUILD_BUILD_USER=RadinkaPutri
+        export KBUILD_BUILD_HOST=builder
+        export KBUILD_BUILD_USER=zainarbani
         export KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        echo "-RadKernel[beta]" > localversion
+        echo "RadKernel[beta]" > localversion
         make O=out ARCH=$ARCH ${{ github.event.inputs.KERNEL_DEFCONFIG }}
-        make -j$(nproc --all) O=out CC=clang ARCH=$ARCH CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- LLVM=1 LLVM_IAS=1 LD=ld.lld NM=llvm-nm AR=llvm-ar OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump > $GITHUB_WORKSPACE/buildlog.txt 2>&1 || true
+        make -j$(nproc --all) O=out CC=clang ARCH=$ARCH CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- LLVM=1 LLVM_IAS=1 LD=ld.lld NM=llvm-nm AR=llvm-ar OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump
         cp out/arch/arm64/boot/Image.gz-dtb $GITHUB_WORKSPACE/project/Image.gz-dtb
         wget https://gist.githubusercontent.com/zainarbani/2b482e9e9c415a644953397b6ba5571f/raw/b66cf8d0683b5397fc1f7cc6b33ff12cc9bf9292/ksu.patch
         git apply ksu.patch || exit
         curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
         make O=out ARCH=$ARCH ${{ github.event.inputs.KERNEL_DEFCONFIG }}
-        make -j$(nproc --all) O=out CC=clang ARCH=$ARCH CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- LLVM=1 LLVM_IAS=1 LD=ld.lld NM=llvm-nm AR=llvm-ar OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump > $GITHUB_WORKSPACE/buildlog.txt 2>&1 || true
+        make -j$(nproc --all) O=out CC=clang ARCH=$ARCH CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- LLVM=1 LLVM_IAS=1 LD=ld.lld NM=llvm-nm AR=llvm-ar OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump
         cp out/arch/arm64/boot/Image.gz-dtb $GITHUB_WORKSPACE/project/Image.gz-dtb-ksu
 
     - name: Prepare AK3
       run: |
         cd $GITHUB_WORKSPACE/project/AnyKernel3
         cp $GITHUB_WORKSPACE/project/Image.gz-dtb Image.gz-dtb
-        zip -r9 $GITHUB_WORKSPACE/project/BionicPulse-1.0.zip -- *
+        zip -r9 $GITHUB_WORKSPACE/project/RadKernel[beta].zip -- *
         cp $GITHUB_WORKSPACE/project/Image.gz-dtb-ksu Image.gz-dtb
-        zip -r9 $GITHUB_WORKSPACE/project/BionicPulse-KSU-1.0.zip -- *
-
-    - name: Upload Build Log and Release
-      uses: actions/upload-artifact@v2
-      with:
-        name: build-log
-        path: $GITHUB_WORKSPACE/buildlog.txt
-
+        zip -r9 $GITHUB_WORKSPACE/project/RadKernel[beta]-ksu.zip -- *
+        
     - name: Upload Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          ${{ github.workspace }}/project/BionicPulse-1.0.zip
-          ${{ github.workspace }}/project/BionicPulse-KSU-1.0.zip
-          ${{ github.workspace }}/build-log/buildlog.txt
-        name: BionicPulse-V1.0-${{ env.BUILD_DATE }}
+          ${{ github.workspace }}/project/RadKernel[beta].zip
+          ${{ github.workspace }}/project/RadKernel[beta]-ksu.zip
+        name: OverHeat-${{ env.BUILD_DATE }}
         tag_name: ${{ env.BUILD_DATE }}
         body: |
           Repo: ${{ github.event.inputs.KERNEL_REPO }}
@@ -97,7 +92,25 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Send Build Log to Telegram
-      if: always()  # This step will run even if previous steps fail
-      run: |
-        curl -F "document=@$GITHUB_WORKSPACE/buildlog.txt" "https://api.telegram.org/bot${{ secrets.BOT_TOKEN }}/sendDocument?chat_id=${{ secrets.CHAT_ID }}"
+    - name: Update TG
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.CHAT_ID }}
+        token: ${{ secrets.BOT_TOKEN }}
+        format: html
+        disable_web_page_preview: true
+        message: |
+          <b>Rad Kernel Update</b>
+
+          <b>Build Date: </b>${{ env.BUILD_DATE }}
+          
+          <a href="https://github.com/${{ github.repository }}/releases/tag/${{ env.BUILD_DATE }}">Download</a>
+          
+          <a href="${{ github.event.inputs.KERNEL_REPO }}/commits/${{ github.event.inputs.KERNEL_BRANCH }}">Changelogs</a>
+
+          <b>Hotfix: </b>${{ github.event.inputs.KERNEL_HOTFIX }}
+
+          <b>Config: </b>${{ github.event.inputs.KERNEL_DEFCONFIG }}
+          <b>Kernel Ver: </b>${{ env.KERNEL_VER }}
+          <b>Clang Ver: </b>${{ env.CLANG_VER }}
+          <b>Maintainer: </b>@Radinka
