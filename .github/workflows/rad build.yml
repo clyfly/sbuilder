@@ -6,11 +6,11 @@ on:
       KERNEL_REPO:
         description: 'KERNEL_REPO'
         required: true
-        default: 'https://github.com/clyfly/kernel-mtk.git'
+        default: 'https://github.com/AndroDesk/kernel-mtk'
       KERNEL_BRANCH:
         description: 'KERNEL_BRANCH'
         required: true
-        default: 'rad-13'
+        default: 's'
       KERNEL_DEFCONFIG:
         description: 'KERNEL_DEFCONFIG'
         required: true
@@ -28,8 +28,8 @@ jobs:
       run: |
         sudo apt update  &> /dev/null
         sudo apt -y install gawk aria2 git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3 &> /dev/null
-        git config --global user.name "builder"
-        git config --global user.email "delta@builder.com"
+        git config --global user.name "rad"
+        git config --global user.email "rad@clyfly.id"
         mkdir -p $GITHUB_WORKSPACE/project
           
     - name: Prepare TC
@@ -53,10 +53,10 @@ jobs:
         export DATE=$(date "+%Y%m%d-%H%M")
         echo "BUILD_DATE=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
         export ARCH=arm64
-        export KBUILD_BUILD_HOST=Rad@gitpod
-        export KBUILD_BUILD_USER=Radinka
+        export KBUILD_BUILD_HOST=rad@gitpod
+        export KBUILD_BUILD_USER=RadinkaPutri
         export KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        echo "-RadPerf[beta1.0]" > localversion
+        echo "-RadKernel[beta]" > localversion
         make O=out ARCH=$ARCH ${{ github.event.inputs.KERNEL_DEFCONFIG }}
         make -j$(nproc --all) O=out CC=clang ARCH=$ARCH CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- LLVM=1 LLVM_IAS=1 LD=ld.lld NM=llvm-nm AR=llvm-ar OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump > $GITHUB_WORKSPACE/buildlog.txt 2>&1 || true
         cp out/arch/arm64/boot/Image.gz-dtb $GITHUB_WORKSPACE/project/Image.gz-dtb
@@ -71,9 +71,9 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/project/AnyKernel3
         cp $GITHUB_WORKSPACE/project/Image.gz-dtb Image.gz-dtb
-        zip -r9 $GITHUB_WORKSPACE/project/RadPerf[beta1.0].zip -- *
+        zip -r9 $GITHUB_WORKSPACE/project/BionicPulse-1.0.zip -- *
         cp $GITHUB_WORKSPACE/project/Image.gz-dtb-ksu Image.gz-dtb
-        zip -r9 $GITHUB_WORKSPACE/project/RadPerf[beta1.0]-KSU.zip -- *
+        zip -r9 $GITHUB_WORKSPACE/project/BionicPulse-KSU-1.0.zip -- *
 
     - name: Upload Build Log and Release
       uses: actions/upload-artifact@v2
@@ -85,10 +85,10 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          ${{ github.workspace }}/project/RadPerf[beta1.0].zip
-          ${{ github.workspace }}/project/RadPerf[beta1.0]-KSU.zip
+          ${{ github.workspace }}/project/BionicPulse-1.0.zip
+          ${{ github.workspace }}/project/BionicPulse-KSU-1.0.zip
           ${{ github.workspace }}/build-log/buildlog.txt
-        name: RadPerf[beta1.0]-${{ env.BUILD_DATE }}
+        name: BionicPulse-V1.0-${{ env.BUILD_DATE }}
         tag_name: ${{ env.BUILD_DATE }}
         body: |
           Repo: ${{ github.event.inputs.KERNEL_REPO }}
