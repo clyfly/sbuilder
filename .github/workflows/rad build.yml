@@ -53,8 +53,8 @@ jobs:
         export DATE=$(date "+%Y%m%d-%H%M")
         echo "BUILD_DATE=$(date "+%Y%m%d%H%M")" >> $GITHUB_ENV
         export ARCH=arm64
-        export KBUILD_BUILD_HOST=DeltaHost
-        export KBUILD_BUILD_USER=Troublescope
+        export KBUILD_BUILD_HOST=Rad@gitpod
+        export KBUILD_BUILD_USER=Radinka
         export KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
         echo "-RadPerf[beta1.0]" > localversion
         make O=out ARCH=$ARCH ${{ github.event.inputs.KERNEL_DEFCONFIG }}
