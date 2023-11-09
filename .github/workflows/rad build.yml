@@ -114,7 +114,7 @@ jobs:
 
         export KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 
-        echo "-BionicPulse-1.0" > localversion
+        echo "-radkernel" > localversion
 
         make O=out ARCH=$ARCH ${{ github.event.inputs.KERNEL_DEFCONFIG }}
 
@@ -144,11 +144,11 @@ jobs:
 
         cp $GITHUB_WORKSPACE/project/Image.gz-dtb Image.gz-dtb
 
-        zip -r9 $GITHUB_WORKSPACE/project/BionicPulse-1.0.zip -- *
+        zip -r9 $GITHUB_WORKSPACE/project/radkernel.zip -- *
 
         cp $GITHUB_WORKSPACE/project/Image.gz-dtb-ksu Image.gz-dtb
 
-        zip -r9 $GITHUB_WORKSPACE/project/BionicPulse-KSU-1.0.zip -- *
+        zip -r9 $GITHUB_WORKSPACE/project/radkernel-KSU-1.0.zip -- *
 
 
 
@@ -172,13 +172,13 @@ jobs:
 
         files: |
 
-          ${{ github.workspace }}/project/BionicPulse-1.0.zip
+          ${{ github.workspace }}/project/radkernel.zip
 
-          ${{ github.workspace }}/project/BionicPulse-KSU-1.0.zip
+          ${{ github.workspace }}/project/radkernel-KSU-1.0.zip
 
           ${{ github.workspace }}/build-log/buildlog.txt
 
-        name: BionicPulse-V1.0-${{ env.BUILD_DATE }}
+        name: radkernel-V1.0-${{ env.BUILD_DATE }}
 
         tag_name: ${{ env.BUILD_DATE }}
 
