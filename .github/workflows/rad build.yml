@@ -56,7 +56,7 @@ jobs:
         export KBUILD_BUILD_HOST=YourWaifu
         export KBUILD_BUILD_USER=Radinka
         export KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        echo "-rad[yourwaifu]" > localversion
+        echo "-FocalorsXD" > localversion
         make O=out ARCH=$ARCH ${{ github.event.inputs.KERNEL_DEFCONFIG }}
         make -j$(nproc --all) O=out CC=clang ARCH=$ARCH CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- LLVM=1 LLVM_IAS=1 LD=ld.lld NM=llvm-nm AR=llvm-ar OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump > $GITHUB_WORKSPACE/buildlog.txt 2>&1 || true
         cp out/arch/arm64/boot/Image.gz-dtb $GITHUB_WORKSPACE/project/Image.gz-dtb
@@ -71,9 +71,9 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/project/AnyKernel3
         cp $GITHUB_WORKSPACE/project/Image.gz-dtb Image.gz-dtb
-        zip -r9 $GITHUB_WORKSPACE/project/AlokTweak.zip -- *
+        zip -r9 $GITHUB_WORKSPACE/project/Focalors.zip -- *
         cp $GITHUB_WORKSPACE/project/Image.gz-dtb-ksu Image.gz-dtb
-        zip -r9 $GITHUB_WORKSPACE/project/AlokTweak-KSU.zip -- *
+        zip -r9 $GITHUB_WORKSPACE/project/Focalors-KSU.zip -- *
 
     - name: Upload Build Log and Release 🤖
       uses: actions/upload-artifact@v2
@@ -85,8 +85,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          ${{ github.workspace }}/project/AlokTweak.zip
-          ${{ github.workspace }}/project/AlokTweak-KSU.zip
+          ${{ github.workspace }}/project/Focalors.zip
+          ${{ github.workspace }}/project/Focalors-KSU.zip
           ${{ github.workspace }}/build-log/buildlog.txt
         name: RadKernel-${{ env.BUILD_DATE }}
         tag_name: ${{ env.BUILD_DATE }}
