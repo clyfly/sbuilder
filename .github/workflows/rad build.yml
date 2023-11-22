@@ -10,7 +10,7 @@ on:
       KERNEL_BRANCH:
         description: 'KERNEL_BRANCH'
         required: true
-        default: 'rad'
+        default: 'rad-test'
       KERNEL_DEFCONFIG:
         description: 'KERNEL_DEFCONFIG'
         required: true
