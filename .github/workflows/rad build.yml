@@ -62,7 +62,7 @@ jobs:
         export KBUILD_BUILD_HOST=localhost
         export KBUILD_BUILD_USER=rad
         export KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        echo "-Focalors-V2" > localversion
+        echo "-rad-14-test" > localversion
         make O=out ARCH=$ARCH ${{ github.event.inputs.KERNEL_DEFCONFIG }}
         make -j$(nproc --all) O=out CC=clang ARCH=$ARCH CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- LLVM=1 LLVM_IAS=1 LD=ld.lld NM=llvm-nm AR=llvm-ar OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump
         cp out/arch/arm64/boot/Image.gz-dtb $GITHUB_WORKSPACE/project/Image.gz-dtb
@@ -78,16 +78,16 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/project/AnyKernel3
         cp $GITHUB_WORKSPACE/project/Image.gz-dtb Image.gz-dtb
-        zip -r9 $GITHUB_WORKSPACE/project/Focalors.zip -- *
+        zip -r9 $GITHUB_WORKSPACE/project/rad14.zip -- *
         cp $GITHUB_WORKSPACE/project/Image.gz-dtb-ksu Image.gz-dtb
-        zip -r9 $GITHUB_WORKSPACE/project/Focalors-ksu.zip -- *
+        zip -r9 $GITHUB_WORKSPACE/project/rad14-ksu.zip -- *
         
     - name: Upload Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          ${{ github.workspace }}/project/Focalors.zip
-          ${{ github.workspace }}/project/Focalors-ksu.zip
+          ${{ github.workspace }}/project/rad14.zip
+          ${{ github.workspace }}/project/rad14-ksu.zip
         name: Heyraaad-${{ env.BUILD_DATE }}
         tag_name: ${{ env.BUILD_DATE }}
         body: |
