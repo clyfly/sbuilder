@@ -6,7 +6,7 @@ on:
       KERNEL_REPO:
         description: 'KERNEL_REPO'
         required: true
-        default: 'https://github.com/cly-build/kernel-mtk.git'
+        default: 'https://github.com/cly-build/mt6785.git'
       KERNEL_BRANCH:
         description: 'KERNEL_BRANCH'
         required: true
@@ -14,7 +14,7 @@ on:
       KERNEL_DEFCONFIG:
         description: 'KERNEL_DEFCONFIG'
         required: true
-        default: 'rosemary_defconfig'
+        default: 'rad_defconfig'
       KERNEL_HOTFIX:
         description: 'KERNEL_HOTFIX'
         required: false
@@ -62,7 +62,7 @@ jobs:
         export KBUILD_BUILD_HOST=localhost
         export KBUILD_BUILD_USER=rad
         export KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        echo "-rad-14-test" > localversion
+        echo "-focalor2" > localversion
         make O=out ARCH=$ARCH ${{ github.event.inputs.KERNEL_DEFCONFIG }}
         make -j$(nproc --all) O=out CC=clang ARCH=$ARCH CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- LLVM=1 LLVM_IAS=1 LD=ld.lld NM=llvm-nm AR=llvm-ar OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump
         cp out/arch/arm64/boot/Image.gz-dtb $GITHUB_WORKSPACE/project/Image.gz-dtb
