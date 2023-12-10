@@ -10,7 +10,7 @@ on:
       KERNEL_BRANCH:
         description: 'KERNEL_BRANCH'
         required: true
-        default: 'rad'
+        default: 'test'
       KERNEL_DEFCONFIG:
         description: 'KERNEL_DEFCONFIG'
         required: true
@@ -103,7 +103,7 @@ jobs:
           
           <a href="${{ github.event.inputs.KERNEL_REPO }}/commits/${{ github.event.inputs.KERNEL_BRANCH }}">Changelogs</a>
 
-          <b>Hotfix:</b>
+          <b>Last Commit:</b>
           ${{ github.event.inputs.KERNEL_HOTFIX }}
 
           <b>Config: </b>${{ github.event.inputs.KERNEL_DEFCONFIG }}
