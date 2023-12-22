@@ -16,7 +16,7 @@ on:
         required: true
         default: 'rad_defconfig'
       KERNEL_HOTFIX:
-        description: 'KERNEL_HOTFIX'
+        description: 'FYI'
         required: false
         default: 'N/A'
 
