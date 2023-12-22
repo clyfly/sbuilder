@@ -6,11 +6,11 @@ on:
       KERNEL_REPO:
         description: 'KERNEL_REPO'
         required: true
-        default: 'https://github.com/cly-build/dtc'
+        default: 'https://github.com/cly-build/rad-kernel-rosemary-R.git'
       KERNEL_BRANCH:
         description: 'KERNEL_BRANCH'
         required: true
-        default: 'furina'
+        default: 'rad'
       KERNEL_DEFCONFIG:
         description: 'KERNEL_DEFCONFIG'
         required: true
