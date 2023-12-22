@@ -62,7 +62,6 @@ jobs:
         export KBUILD_BUILD_HOST=localhost
         export KBUILD_BUILD_USER=rad
         export KBUILD_COMPILER_STRING="$(clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
-        echo "-stable" > localversion
         make O=out ARCH=$ARCH ${{ github.event.inputs.KERNEL_DEFCONFIG }}
         make -j$(nproc --all) O=out CC=clang ARCH=$ARCH CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi- LLVM=1 LLVM_IAS=1 LD=ld.lld NM=llvm-nm AR=llvm-ar OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump
         cp out/arch/arm64/boot/Image.gz-dtb $GITHUB_WORKSPACE/project/Image.gz-dtb
@@ -113,7 +112,7 @@ jobs:
           
           <a href="${{ github.event.inputs.KERNEL_REPO }}/commits/${{ github.event.inputs.KERNEL_BRANCH }}">Changelogs</a>
 
-          <b>Hotfix:</b>
+          <b>FYI:</b>
           ${{ github.event.inputs.KERNEL_HOTFIX }}
 
           <b>Config: </b>${{ github.event.inputs.KERNEL_DEFCONFIG }}
