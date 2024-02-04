@@ -6,15 +6,15 @@ on:
       KERNEL_REPO:
         description: 'KERNEL_REPO'
         required: true
-        default: 'https://github.com/cly-build/rad-kernel-rosemary-R.git'
+        default: 'https://github.com/Sicantik-Hanya-Gabut/krnl.git'
       KERNEL_BRANCH:
         description: 'KERNEL_BRANCH'
         required: true
-        default: 'rad'
+        default: 'wip'
       KERNEL_DEFCONFIG:
         description: 'KERNEL_DEFCONFIG'
         required: true
-        default: 'rad_defconfig'
+        default: 'rosemary_defconfig'
       KERNEL_HOTFIX:
         description: 'FYI'
         required: false
