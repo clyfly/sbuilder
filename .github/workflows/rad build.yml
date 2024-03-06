@@ -6,19 +6,19 @@ on:
       KERNEL_REPO:
         description: 'KERNEL_REPO'
         required: true
-        default: 'https://github.com/Sicantik-Hanya-Gabut/krnl.git'
+        default: 'https://github.com/heyradrepo/kernel_xiaomi_rosemary'
       KERNEL_BRANCH:
         description: 'KERNEL_BRANCH'
         required: true
-        default: 'wip'
+        default: 'udc'
       KERNEL_DEFCONFIG:
         description: 'KERNEL_DEFCONFIG'
         required: true
         default: 'rosemary_defconfig'
       KERNEL_HOTFIX:
-        description: 'FYI'
+        description: 'ChangeLogs'
         required: false
-        default: 'no ingfo'
+        default: 'update dikit doang'
 
 jobs:
   build:
